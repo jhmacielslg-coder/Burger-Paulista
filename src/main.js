@@ -269,29 +269,43 @@ function closeProductModal() {
 function addToCart() {
   if (!currentProduct) return;
 
-  const addons = selectedAddons.map((i) => currentProduct.addons[i]);
+  const addons = (currentProduct.addons && selectedAddons.length > 0)
+    ? selectedAddons.map((i) => currentProduct.addons[i]).filter(Boolean)
+    : [];
   const obs = $('#modalObs').value.trim();
 
   let itemPrice = currentProduct.price;
-  addons.forEach((a) => { itemPrice += a.price; });
+  addons.forEach((a) => { if (a && a.price) itemPrice += a.price; });
 
-  const cartItem = {
-    id: Date.now(),
-    productId: currentProduct.id,
-    name: currentProduct.name,
-    image: currentProduct.image,
-    basePrice: currentProduct.price,
-    unitPrice: itemPrice,
-    quantity: modalQuantity,
-    addons: addons,
-    obs: obs,
-  };
+  // Merge identical items (same product, same addons, same observation)
+  const addonsKey = addons.map((a) => a.name).sort().join('|');
+  const existingIndex = cart.findIndex(
+    (item) => item.productId === currentProduct.id &&
+              item.obs === obs &&
+              (item.addons || []).map((a) => a.name).sort().join('|') === addonsKey
+  );
 
-  cart.push(cartItem);
+  if (existingIndex > -1) {
+    cart[existingIndex].quantity += modalQuantity;
+  } else {
+    const cartItem = {
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      productId: currentProduct.id,
+      name: currentProduct.name,
+      image: currentProduct.image,
+      basePrice: currentProduct.price,
+      unitPrice: itemPrice,
+      quantity: modalQuantity,
+      addons: addons,
+      obs: obs,
+    };
+    cart.push(cartItem);
+  }
+
   updateCartUI();
   closeProductModal();
-  showToast(`${currentProduct.name} adicionado!`);
-  openCart();
+  showToast(`✓ ${modalQuantity > 1 ? modalQuantity + 'x ' : ''}${currentProduct.name} adicionado ao pedido!`);
+  // Permanece na página do cardápio para facilitar escolher mais itens!
 }
 
 function removeFromCart(cartItemId) {
@@ -332,23 +346,44 @@ function updateCartUI() {
     badge.classList.remove('active');
   }
 
+  // Floating Cart Bar (permite ver o pedido e abrir a qualquer momento sem prender na tela)
+  const floatingBar = $('#floatingCartBar');
+  const floatingBadge = $('#floatingCartBadge');
+  const floatingTotal = $('#floatingCartTotal');
+  const subtotal = getCartTotal();
+
+  if (floatingBar) {
+    if (count > 0 && !$('#cartSidebar').classList.contains('open')) {
+      floatingBar.style.display = 'block';
+      if (floatingBadge) floatingBadge.textContent = count;
+      if (floatingTotal) floatingTotal.textContent = formatPrice(subtotal);
+    } else {
+      floatingBar.style.display = 'none';
+    }
+  }
+
   // Cart items
   const container = $('#cartItems');
   const emptyEl = $('#cartEmpty');
   const checkoutEl = $('#cartCheckout');
+  const previewContainer = $('#checkoutItemsPreview');
 
   if (cart.length === 0) {
     container.innerHTML = '';
-    container.appendChild(emptyEl);
-    emptyEl.style.display = 'block';
-    checkoutEl.style.display = 'none';
+    if (emptyEl) {
+      container.appendChild(emptyEl);
+      emptyEl.style.display = 'block';
+    }
+    if (checkoutEl) checkoutEl.style.display = 'none';
+    if (previewContainer) previewContainer.innerHTML = '';
     return;
   }
 
-  emptyEl.style.display = 'none';
-  checkoutEl.style.display = 'block';
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (checkoutEl) checkoutEl.style.display = 'block';
   container.innerHTML = '';
 
+  // Render cart items with reliable thumbnails
   cart.forEach((item) => {
     const el = document.createElement('div');
     el.className = 'cart-item';
@@ -362,8 +397,10 @@ function updateCartUI() {
       details += `Obs: ${item.obs}`;
     }
 
+    const itemImg = resolveImageUrl(item.image);
+
     el.innerHTML = `
-      <img class="cart-item__image" src="${resolveImageUrl(item.image)}" alt="${item.name}" loading="lazy" />
+      <img class="cart-item__image" src="${itemImg}" alt="${item.name}" loading="eager" onerror="this.onerror=null; this.src='./images/x-bacon-especial.jpg';" />
       <div class="cart-item__info">
         <div class="cart-item__name">${item.name}</div>
         ${details ? `<div class="cart-item__details">${details}</div>` : ''}
@@ -392,8 +429,22 @@ function updateCartUI() {
     container.appendChild(el);
   });
 
+  // Render checkout miniature items preview with thumbnails
+  if (previewContainer) {
+    previewContainer.innerHTML = '';
+    cart.forEach((item) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'checkout__preview-item';
+      thumb.title = `${item.name} (${item.quantity}x)`;
+      thumb.innerHTML = `
+        <img class="checkout__preview-img" src="${resolveImageUrl(item.image)}" alt="${item.name}" loading="eager" onerror="this.onerror=null; this.src='./images/x-bacon-especial.jpg';" />
+        <span class="checkout__preview-qty">${item.quantity}x</span>
+      `;
+      previewContainer.appendChild(thumb);
+    });
+  }
+
   // Update checkout totals
-  const subtotal = getCartTotal();
   const deliveryFee = DATA.config.deliveryFee;
   const total = subtotal + deliveryFee;
 
@@ -407,12 +458,19 @@ function openCart() {
   $('#cartSidebar').classList.add('open');
   $('#cartOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  const floatingBar = $('#floatingCartBar');
+  if (floatingBar) floatingBar.style.display = 'none';
+  updateCartUI();
 }
 
 function closeCart() {
   $('#cartSidebar').classList.remove('open');
   $('#cartOverlay').classList.remove('open');
   document.body.style.overflow = '';
+  const floatingBar = $('#floatingCartBar');
+  if (floatingBar && cart.length > 0) {
+    floatingBar.style.display = 'block';
+  }
 }
 
 // === TOAST ===
@@ -556,6 +614,16 @@ function setupEventListeners() {
   $('#cartToggleBtn').addEventListener('click', openCart);
   $('#cartCloseBtn').addEventListener('click', closeCart);
   $('#cartOverlay').addEventListener('click', closeCart);
+
+  // Return to menu buttons
+  const continueBtn = $('#cartContinueShoppingBtn');
+  if (continueBtn) continueBtn.addEventListener('click', closeCart);
+
+  const emptyBackBtn = $('#cartEmptyBackBtn');
+  if (emptyBackBtn) emptyBackBtn.addEventListener('click', closeCart);
+
+  const floatingBar = $('#floatingCartBar');
+  if (floatingBar) floatingBar.addEventListener('click', openCart);
 
   // Payment select - show/hide pix
   $('#checkoutPayment').addEventListener('change', (e) => {

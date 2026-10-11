@@ -130,16 +130,27 @@
       <button class="cart-sidebar__close" id="cartCloseBtn" aria-label="Fechar carrinho">✕</button>
     </div>
 
+    <!-- BOTÃO PARA VOLTAR AO CARDÁPIO / ADICIONAR MAIS ITENS -->
+    <div class="cart-sidebar__back-bar">
+      <button class="cart-sidebar__back-btn" id="cartContinueShoppingBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Adicionar mais itens / Ver Cardápio
+      </button>
+    </div>
+
     <div class="cart-sidebar__items" id="cartItems">
       <div class="cart-sidebar__empty" id="cartEmpty">
         <span class="cart-sidebar__empty-icon">🛒</span>
         <p>Seu carrinho está vazio</p>
         <span>Adicione itens do cardápio</span>
+        <button class="cart-empty__btn" id="cartEmptyBackBtn">🍔 Escolher no cardápio</button>
       </div>
     </div>
 
     <!-- CHECKOUT SECTION -->
     <div class="cart-sidebar__checkout" id="cartCheckout" style="display:none;">
+      <!-- MINIATURAS DOS ITENS NO CHECKOUT -->
+      <div class="checkout__items-preview" id="checkoutItemsPreview"></div>
       <div class="checkout__summary">
         <div class="checkout__row">
           <span>Subtotal</span>
@@ -258,6 +269,20 @@
   <a href="https://wa.me/5561996243006" target="_blank" rel="noopener noreferrer" class="whatsapp-float" id="whatsappFloat" aria-label="Contato WhatsApp">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.12 1.522 5.857L.055 23.456a.5.5 0 0 0 .61.61l5.6-1.467A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 0 1-5.39-1.59l-.386-.23-3.325.87.87-3.326-.23-.386A9.94 9.94 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
   </a>
+
+  <!-- FLOATING CART BAR -->
+  <aside class="floating-cart-bar" id="floatingCartBar" style="display:none;" aria-label="Ver pedido">
+    <div class="floating-cart-bar__content">
+      <div class="floating-cart-bar__left">
+        <span class="floating-cart-bar__badge" id="floatingCartBadge">0</span>
+        <span class="floating-cart-bar__text">Ver Meu Pedido</span>
+      </div>
+      <div class="floating-cart-bar__right">
+        <span class="floating-cart-bar__price" id="floatingCartTotal">R$ 0,00</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+  </aside>
 
   <!-- TOAST NOTIFICATION -->
   <div class="toast" id="toast">
