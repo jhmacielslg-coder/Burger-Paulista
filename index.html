@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Burger Paulista - Hamburgueria Artesanal em Formosa/GO. Peça pelo WhatsApp! Hambúrgueres artesanais, combos, porções, bebidas e sobremesas com entrega rápida." />
+  <meta name="theme-color" content="#FF6B00" />
+  <title>Burger Paulista | Hamburgueria Artesanal - Delivery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="header__container">
+      <div class="header__brand">
+        <span class="header__logo">🍔</span>
+        <div class="header__text">
+          <h1 class="header__title">Burger Paulista</h1>
+          <span class="header__tagline">Hamburgueria Artesanal</span>
+        </div>
+      </div>
+      <div class="header__actions">
+        <button class="header__cart-btn" id="cartToggleBtn" aria-label="Abrir carrinho">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="m1 1 4 2 2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="header__cart-badge" id="cartBadge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO / INFO BAR -->
+  <section class="hero" id="hero">
+    <div class="hero__container">
+      <div class="hero__info-bar">
+        <div class="hero__info-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="storeAddress">Laguinho do Vovô - Formosa/GO</span>
+        </div>
+        <div class="hero__info-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="deliveryTime">35–50 min</span>
+        </div>
+        <div class="hero__info-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/></svg>
+          <span>Taxa: <strong id="deliveryFeeDisplay">R$ 6,00</strong></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH BAR -->
+  <section class="search-section" id="searchSection">
+    <div class="search-section__container">
+      <div class="search-bar">
+        <svg class="search-bar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" class="search-bar__input" id="searchInput" placeholder="Buscar no cardápio..." autocomplete="off" />
+        <button class="search-bar__clear" id="searchClear" aria-label="Limpar busca" style="display:none;">✕</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES NAV -->
+  <nav class="categories-nav" id="categoriesNav">
+    <div class="categories-nav__container" id="categoriesList">
+      <!-- Dynamically populated -->
+    </div>
+  </nav>
+
+  <!-- PRODUCTS GRID -->
+  <main class="products-section" id="productsSection">
+    <div class="products-section__container" id="productsContainer">
+      <!-- Dynamically populated -->
+    </div>
+  </main>
+
+  <!-- PRODUCT MODAL -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="modal__close" id="modalClose" aria-label="Fechar">✕</button>
+      <div class="modal__image-wrapper">
+        <img class="modal__image" id="modalImage" src="" alt="" loading="lazy" />
+        <span class="modal__badge" id="modalBadge"></span>
+      </div>
+      <div class="modal__body">
+        <h2 class="modal__title" id="modalTitle"></h2>
+        <p class="modal__description" id="modalDescription"></p>
+        <p class="modal__price" id="modalPrice"></p>
+
+        <!-- Addons -->
+        <div class="modal__section" id="addonsSection" style="display:none;">
+          <h3 class="modal__section-title">Adicionais</h3>
+          <div class="modal__options" id="addonsList"></div>
+        </div>
+
+        <!-- Removals -->
+        <div class="modal__section" id="removalsSection" style="display:none;">
+          <h3 class="modal__section-title">Remover ingredientes</h3>
+          <div class="modal__options" id="removalsList"></div>
+        </div>
+
+        <!-- Observations -->
+        <div class="modal__section">
+          <h3 class="modal__section-title">Observações</h3>
+          <textarea class="modal__textarea" id="modalObs" placeholder="Ex: Ponto da carne, alergia..." rows="2"></textarea>
+        </div>
+
+        <!-- Quantity -->
+        <div class="modal__quantity-row">
+          <div class="quantity-control">
+            <button class="quantity-control__btn" id="modalQtyMinus" aria-label="Diminuir quantidade">−</button>
+            <span class="quantity-control__value" id="modalQtyValue">1</span>
+            <button class="quantity-control__btn" id="modalQtyPlus" aria-label="Aumentar quantidade">+</button>
+          </div>
+          <button class="modal__add-btn" id="modalAddBtn">
+            Adicionar • <span id="modalTotalPrice">R$ 0,00</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar" aria-label="Carrinho">
+    <div class="cart-sidebar__header">
+      <h2 class="cart-sidebar__title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="m1 1 4 2 2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Meu Pedido
+      </h2>
+      <button class="cart-sidebar__close" id="cartCloseBtn" aria-label="Fechar carrinho">✕</button>
+    </div>
+
+    <div class="cart-sidebar__items" id="cartItems">
+      <div class="cart-sidebar__empty" id="cartEmpty">
+        <span class="cart-sidebar__empty-icon">🛒</span>
+        <p>Seu carrinho está vazio</p>
+        <span>Adicione itens do cardápio</span>
+      </div>
+    </div>
+
+    <!-- CHECKOUT SECTION -->
+    <div class="cart-sidebar__checkout" id="cartCheckout" style="display:none;">
+      <div class="checkout__summary">
+        <div class="checkout__row">
+          <span>Subtotal</span>
+          <span id="checkoutSubtotal">R$ 0,00</span>
+        </div>
+        <div class="checkout__row">
+          <span>Taxa de entrega</span>
+          <span id="checkoutDeliveryFee">R$ 6,00</span>
+        </div>
+        <div class="checkout__row checkout__row--total">
+          <span>Total</span>
+          <span id="checkoutTotal">R$ 0,00</span>
+        </div>
+      </div>
+
+      <div class="checkout__form">
+        <h3 class="checkout__form-title">Dados para entrega</h3>
+        <div class="checkout__field">
+          <label for="checkoutName">Nome *</label>
+          <input type="text" id="checkoutName" placeholder="Seu nome completo" required />
+        </div>
+        <div class="checkout__field">
+          <label for="checkoutAddress">Casa - Quadra - Lote *</label>
+          <input type="text" id="checkoutAddress" placeholder="Ex: Casa 10, Qd. 5, Lt. 8" required />
+        </div>
+        <div class="checkout__field">
+          <label for="checkoutSetor">Setor *</label>
+          <input type="text" id="checkoutSetor" placeholder="Nome do setor/bairro" required />
+        </div>
+        <div class="checkout__field">
+          <label for="checkoutPayment">Forma de Pagamento *</label>
+          <select id="checkoutPayment">
+            <option value="">Selecione...</option>
+            <option value="entrega">Pagar na Entrega (Cartão/Dinheiro)</option>
+            <option value="pix">Pix</option>
+          </select>
+        </div>
+
+        <!-- Pix Box -->
+        <div class="checkout__pix-box" id="pixBox" style="display:none;">
+          <div class="checkout__pix-icon">💠</div>
+          <p class="checkout__pix-title">Chave Pix</p>
+          <div class="checkout__pix-key">
+            <code id="pixKeyDisplay">61996243006</code>
+            <button class="checkout__pix-copy" id="pixCopyBtn">📋 Copie para PAGAR AGORA</button>
+          </div>
+          <p class="checkout__pix-info">Envie o comprovante junto com o pedido no WhatsApp</p>
+        </div>
+      </div>
+
+      <button class="checkout__submit-btn" id="checkoutSubmitBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.12 1.522 5.857L.055 23.456a.5.5 0 0 0 .61.61l5.6-1.467A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 0 1-5.39-1.59l-.386-.23-3.325.87.87-3.326-.23-.386A9.94 9.94 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Enviar Pedido pelo WhatsApp
+      </button>
+    </div>
+  </aside>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="footer">
+    <div class="footer__container">
+      <div class="footer__grid">
+        <div class="footer__col footer__col--brand">
+          <div class="footer__logo">
+            <span class="footer__logo-icon">🍔</span>
+            <span class="footer__logo-text">Burger Paulista</span>
+          </div>
+          <p class="footer__brand-desc">Hamburgueria Artesanal com ingredientes selecionados e sabor incomparável. Delivery em Formosa/GO.</p>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Cardápio</h4>
+          <ul class="footer__links">
+            <li><a href="#artesanais">Artesanais</a></li>
+            <li><a href="#combos">Combos</a></li>
+            <li><a href="#batatas">Batatas</a></li>
+            <li><a href="#bebidas">Bebidas</a></li>
+            <li><a href="#sobremesas">Sobremesas</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Contato</h4>
+          <ul class="footer__links">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Laguinho do Vovô - Formosa/GO
+            </li>
+            <li>
+              <a href="https://wa.me/5561996243006" target="_blank" rel="noopener noreferrer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                (61) 99624-3006
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Redes Sociais</h4>
+          <div class="footer__social">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Instagram">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Facebook">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2026 Burger Paulista. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING WHATSAPP BUTTON -->
+  <a href="https://wa.me/5561996243006" target="_blank" rel="noopener noreferrer" class="whatsapp-float" id="whatsappFloat" aria-label="Contato WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.12 1.522 5.857L.055 23.456a.5.5 0 0 0 .61.61l5.6-1.467A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 0 1-5.39-1.59l-.386-.23-3.325.87.87-3.326-.23-.386A9.94 9.94 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+  </a>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">
+    <span class="toast__icon">✓</span>
+    <span class="toast__message" id="toastMessage">Item adicionado ao carrinho!</span>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

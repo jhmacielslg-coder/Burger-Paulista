@@ -1,0 +1,245 @@
+{
+  "config": {
+    "storeName": "Burger Paulista",
+    "storeTagline": "Hamburgueria Artesanal",
+    "address": "Laguinho do Vovô - Formosa/GO",
+    "whatsapp": "5561996243006",
+    "whatsappDisplay": "(61) 99624-3006",
+    "deliveryFee": 6.00,
+    "deliveryTime": "35–50 min",
+    "pixKey": "61996243006",
+    "primaryColor": "#FF6B00",
+    "instagram": "#",
+    "facebook": "#"
+  },
+  "categories": [
+    { "id": "artesanais", "name": "Artesanais", "icon": "🍔" },
+    { "id": "combos", "name": "Combos", "icon": "🎉" },
+    { "id": "batatas", "name": "Batatas", "icon": "🍟" },
+    { "id": "porcoes", "name": "Porções", "icon": "🧆" },
+    { "id": "bebidas", "name": "Bebidas", "icon": "🥤" },
+    { "id": "sobremesas", "name": "Sobremesas", "icon": "🍫" }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "X-Bacon Especial",
+      "category": "artesanais",
+      "description": "Hambúrguer artesanal 180g, queijo cheddar, bacon crocante, alface, tomate e molho especial da casa.",
+      "price": 32.90,
+      "image": "/images/x-bacon-especial.jpg",
+      "badge": "Mais Pedido",
+      "addons": [
+        { "name": "Bacon extra", "price": 5.00 },
+        { "name": "Cheddar extra", "price": 4.00 },
+        { "name": "Hambúrguer extra", "price": 9.00 },
+        { "name": "Molho especial", "price": 2.00 }
+      ],
+      "removals": [
+        "Sem cebola",
+        "Sem tomate",
+        "Sem alface",
+        "Sem molho"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "X-Salada Clássico",
+      "category": "artesanais",
+      "description": "Hambúrguer artesanal 150g, queijo prato, alface, tomate, cebola roxa e maionese artesanal no pão brioche.",
+      "price": 28.90,
+      "image": "/images/x-salada.jpg",
+      "badge": "",
+      "addons": [
+        { "name": "Bacon extra", "price": 5.00 },
+        { "name": "Queijo extra", "price": 4.00 },
+        { "name": "Hambúrguer extra", "price": 9.00 },
+        { "name": "Ovo", "price": 3.00 }
+      ],
+      "removals": [
+        "Sem cebola",
+        "Sem tomate",
+        "Sem alface",
+        "Sem maionese"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Smash Burger Duplo",
+      "category": "artesanais",
+      "description": "Dois smash patties 90g cada, queijo americano derretido, picles, cebola caramelizada e ketchup especial.",
+      "price": 34.90,
+      "image": "/images/smash-burger.jpg",
+      "badge": "Novidade",
+      "addons": [
+        { "name": "Smash patty extra", "price": 8.00 },
+        { "name": "Queijo extra", "price": 4.00 },
+        { "name": "Bacon", "price": 5.00 },
+        { "name": "Cebola crispy", "price": 3.00 }
+      ],
+      "removals": [
+        "Sem picles",
+        "Sem cebola",
+        "Sem ketchup"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Combo Burger Duplo",
+      "category": "combos",
+      "description": "Hambúrguer duplo artesanal com cheddar, batata frita média e refrigerante 350ml.",
+      "price": 45.90,
+      "image": "/images/combo-duplo.jpg",
+      "badge": "Economia",
+      "addons": [
+        { "name": "Trocar refri por suco", "price": 2.00 },
+        { "name": "Bacon extra", "price": 5.00 },
+        { "name": "Batata grande (+100g)", "price": 5.00 },
+        { "name": "Onion rings", "price": 6.00 }
+      ],
+      "removals": [
+        "Sem cebola",
+        "Sem tomate",
+        "Sem alface"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Combo X-Bacon",
+      "category": "combos",
+      "description": "X-Bacon artesanal 180g, porção de batata frita e refrigerante lata 350ml. O combo mais pedido!",
+      "price": 49.90,
+      "image": "/images/x-bacon-especial.jpg",
+      "badge": "Mais Pedido",
+      "addons": [
+        { "name": "Trocar refri por suco", "price": 2.00 },
+        { "name": "Cheddar extra", "price": 4.00 },
+        { "name": "Bacon extra", "price": 5.00 },
+        { "name": "Batata grande (+100g)", "price": 5.00 }
+      ],
+      "removals": [
+        "Sem cebola",
+        "Sem tomate",
+        "Sem alface",
+        "Sem molho"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Batata Recheada Família",
+      "category": "batatas",
+      "description": "Batata Frita 600g, queijo cheddar, bacon crocante e molho especial da casa.",
+      "price": 40.00,
+      "image": "/images/batata-recheada.jpg",
+      "badge": "Mais Pedido",
+      "addons": [
+        { "name": "Bacon extra", "price": 5.00 },
+        { "name": "Cheddar extra", "price": 4.00 },
+        { "name": "Molho especial", "price": 2.00 }
+      ],
+      "removals": [
+        "Sem cebola",
+        "Sem tomate",
+        "Sem alface",
+        "Sem molho"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Batata Frita Tradicional",
+      "category": "batatas",
+      "description": "Porção generosa de batata frita crocante (400g) com sal e temperos da casa.",
+      "price": 22.00,
+      "image": "/images/batata-recheada.jpg",
+      "badge": "",
+      "addons": [
+        { "name": "Cheddar", "price": 4.00 },
+        { "name": "Bacon", "price": 5.00 },
+        { "name": "Molho especial", "price": 2.00 }
+      ],
+      "removals": []
+    },
+    {
+      "id": 8,
+      "name": "Onion Rings",
+      "category": "porcoes",
+      "description": "Anéis de cebola empanados e fritos, crocantes por fora e macios por dentro. Acompanha molho especial.",
+      "price": 24.90,
+      "image": "/images/onion-rings.jpg",
+      "badge": "",
+      "addons": [
+        { "name": "Molho extra", "price": 2.00 },
+        { "name": "Porção grande (+50%)", "price": 8.00 }
+      ],
+      "removals": []
+    },
+    {
+      "id": 9,
+      "name": "Refrigerante Lata 350ml",
+      "category": "bebidas",
+      "description": "Coca-Cola, Guaraná Antarctica ou Fanta Laranja. Gelado e refrescante!",
+      "price": 7.00,
+      "image": "/images/refrigerante.jpg",
+      "badge": "",
+      "addons": [],
+      "removals": []
+    },
+    {
+      "id": 10,
+      "name": "Suco Natural 500ml",
+      "category": "bebidas",
+      "description": "Suco natural feito na hora. Sabores: Laranja, Abacaxi com Hortelã ou Maracujá.",
+      "price": 12.00,
+      "image": "/images/suco-natural.jpg",
+      "badge": "",
+      "addons": [
+        { "name": "Sem açúcar", "price": 0 }
+      ],
+      "removals": []
+    },
+    {
+      "id": 11,
+      "name": "Água Mineral 500ml",
+      "category": "bebidas",
+      "description": "Água mineral sem gás, geladinha. Perfeita para acompanhar seu pedido.",
+      "price": 4.00,
+      "image": "/images/agua-mineral.jpg",
+      "badge": "",
+      "addons": [],
+      "removals": []
+    },
+    {
+      "id": 12,
+      "name": "Brownie com Sorvete",
+      "category": "sobremesas",
+      "description": "Brownie artesanal de chocolate belga com bola de sorvete de baunilha e calda quente de chocolate.",
+      "price": 22.90,
+      "image": "/images/brownie.jpg",
+      "badge": "Imperdível",
+      "addons": [
+        { "name": "Bola extra de sorvete", "price": 4.00 },
+        { "name": "Calda de caramelo", "price": 3.00 }
+      ],
+      "removals": [
+        "Sem calda",
+        "Sem sorvete"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Milkshake Chocolate 400ml",
+      "category": "sobremesas",
+      "description": "Milkshake cremoso de chocolate com chantilly, calda de chocolate e granulado.",
+      "price": 19.90,
+      "image": "/images/milkshake.jpg",
+      "badge": "",
+      "addons": [
+        { "name": "Tamanho grande (600ml)", "price": 6.00 },
+        { "name": "Calda extra", "price": 3.00 }
+      ],
+      "removals": [
+        "Sem chantilly"
+      ]
+    }
+  ]
+}
