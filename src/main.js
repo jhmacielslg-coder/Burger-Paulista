@@ -431,6 +431,7 @@ function submitOrder() {
   const name = $('#checkoutName').value.trim();
   const address = $('#checkoutAddress').value.trim();
   const setor = $('#checkoutSetor').value.trim();
+  const reference = $('#checkoutReference') ? $('#checkoutReference').value.trim() : '';
   const payment = $('#checkoutPayment').value;
 
   let hasError = false;
@@ -477,7 +478,11 @@ function submitOrder() {
   msg += `📍 *Dados de Entrega:*\n`;
   msg += `Nome: ${name}\n`;
   msg += `Endereço: ${address}\n`;
-  msg += `Setor: ${setor}\n\n`;
+  msg += `Setor: ${setor}\n`;
+  if (reference) {
+    msg += `Ponto de Referência: ${reference}\n`;
+  }
+  msg += `\n`;
 
   const paymentLabel = payment === 'pix' ? 'Pix' : 'Pagar na Entrega (Cartão/Dinheiro)';
   msg += `💳 *Pagamento:* ${paymentLabel}\n`;
