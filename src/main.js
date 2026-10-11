@@ -366,7 +366,6 @@ function updateCartUI() {
   const container = $('#cartItems');
   const emptyEl = $('#cartEmpty');
   const checkoutEl = $('#cartCheckout');
-  const previewContainer = $('#checkoutItemsPreview');
 
   if (cart.length === 0) {
     container.innerHTML = '';
@@ -375,7 +374,6 @@ function updateCartUI() {
       emptyEl.style.display = 'block';
     }
     if (checkoutEl) checkoutEl.style.display = 'none';
-    if (previewContainer) previewContainer.innerHTML = '';
     return;
   }
 
@@ -428,21 +426,6 @@ function updateCartUI() {
 
     container.appendChild(el);
   });
-
-  // Render checkout miniature items preview with thumbnails
-  if (previewContainer) {
-    previewContainer.innerHTML = '';
-    cart.forEach((item) => {
-      const thumb = document.createElement('div');
-      thumb.className = 'checkout__preview-item';
-      thumb.title = `${item.name} (${item.quantity}x)`;
-      thumb.innerHTML = `
-        <img class="checkout__preview-img" src="${resolveImageUrl(item.image)}" alt="${item.name}" loading="eager" onerror="this.onerror=null; this.src='./images/x-bacon-especial.jpg';" />
-        <span class="checkout__preview-qty">${item.quantity}x</span>
-      `;
-      previewContainer.appendChild(thumb);
-    });
-  }
 
   // Update checkout totals
   const deliveryFee = DATA.config.deliveryFee;
