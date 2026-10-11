@@ -32,12 +32,6 @@
         { "name": "Cheddar extra", "price": 4.00 },
         { "name": "Hambúrguer extra", "price": 9.00 },
         { "name": "Molho especial", "price": 2.00 }
-      ],
-      "removals": [
-        "Sem cebola",
-        "Sem tomate",
-        "Sem alface",
-        "Sem molho"
       ]
     },
     {
@@ -53,12 +47,6 @@
         { "name": "Queijo extra", "price": 4.00 },
         { "name": "Hambúrguer extra", "price": 9.00 },
         { "name": "Ovo", "price": 3.00 }
-      ],
-      "removals": [
-        "Sem cebola",
-        "Sem tomate",
-        "Sem alface",
-        "Sem maionese"
       ]
     },
     {
@@ -74,11 +62,6 @@
         { "name": "Queijo extra", "price": 4.00 },
         { "name": "Bacon", "price": 5.00 },
         { "name": "Cebola crispy", "price": 3.00 }
-      ],
-      "removals": [
-        "Sem picles",
-        "Sem cebola",
-        "Sem ketchup"
       ]
     },
     {
@@ -94,11 +77,6 @@
         { "name": "Bacon extra", "price": 5.00 },
         { "name": "Batata grande (+100g)", "price": 5.00 },
         { "name": "Onion rings", "price": 6.00 }
-      ],
-      "removals": [
-        "Sem cebola",
-        "Sem tomate",
-        "Sem alface"
       ]
     },
     {
@@ -114,12 +92,6 @@
         { "name": "Cheddar extra", "price": 4.00 },
         { "name": "Bacon extra", "price": 5.00 },
         { "name": "Batata grande (+100g)", "price": 5.00 }
-      ],
-      "removals": [
-        "Sem cebola",
-        "Sem tomate",
-        "Sem alface",
-        "Sem molho"
       ]
     },
     {
@@ -134,12 +106,6 @@
         { "name": "Bacon extra", "price": 5.00 },
         { "name": "Cheddar extra", "price": 4.00 },
         { "name": "Molho especial", "price": 2.00 }
-      ],
-      "removals": [
-        "Sem cebola",
-        "Sem tomate",
-        "Sem alface",
-        "Sem molho"
       ]
     },
     {
@@ -154,8 +120,7 @@
         { "name": "Cheddar", "price": 4.00 },
         { "name": "Bacon", "price": 5.00 },
         { "name": "Molho especial", "price": 2.00 }
-      ],
-      "removals": []
+      ]
     },
     {
       "id": 9,
@@ -165,8 +130,7 @@
       "price": 7.00,
       "image": "/images/refrigerante.jpg",
       "badge": "",
-      "addons": [],
-      "removals": []
+      "addons": []
     },
     {
       "id": 10,
@@ -178,8 +142,7 @@
       "badge": "",
       "addons": [
         { "name": "Sem açúcar", "price": 0 }
-      ],
-      "removals": []
+      ]
     },
     {
       "id": 11,
@@ -189,8 +152,7 @@
       "price": 4.00,
       "image": "/images/agua-mineral.jpg",
       "badge": "",
-      "addons": [],
-      "removals": []
+      "addons": []
     }
   ]
 }

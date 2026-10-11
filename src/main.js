@@ -12,7 +12,6 @@ let activeCategory = 'all';
 let currentProduct = null;
 let modalQuantity = 1;
 let selectedAddons = [];
-let selectedRemovals = [];
 
 // === DOM REFS ===
 const $ = (sel) => document.querySelector(sel);
@@ -187,7 +186,6 @@ function openProductModal(product) {
   currentProduct = product;
   modalQuantity = 1;
   selectedAddons = [];
-  selectedRemovals = [];
 
   $('#modalImage').src = resolveImageUrl(product.image);
   $('#modalImage').alt = product.name;
@@ -220,20 +218,6 @@ function openProductModal(product) {
     addonsSection.style.display = 'none';
   }
 
-  // Removals
-  const removalsSection = $('#removalsSection');
-  const removalsList = $('#removalsList');
-  removalsList.innerHTML = '';
-  if (product.removals && product.removals.length > 0) {
-    removalsSection.style.display = 'block';
-    product.removals.forEach((removal, i) => {
-      const opt = createOptionElement(removal, '', 'removal', i);
-      removalsList.appendChild(opt);
-    });
-  } else {
-    removalsSection.style.display = 'none';
-  }
-
   updateModalTotal();
   $('#productModal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -261,12 +245,6 @@ function toggleOption(el, type, index) {
     } else {
       selectedAddons = selectedAddons.filter((i) => i !== index);
     }
-  } else {
-    if (el.classList.contains('selected')) {
-      selectedRemovals.push(index);
-    } else {
-      selectedRemovals = selectedRemovals.filter((i) => i !== index);
-    }
   }
   updateModalTotal();
 }
@@ -292,7 +270,6 @@ function addToCart() {
   if (!currentProduct) return;
 
   const addons = selectedAddons.map((i) => currentProduct.addons[i]);
-  const removals = selectedRemovals.map((i) => currentProduct.removals[i]);
   const obs = $('#modalObs').value.trim();
 
   let itemPrice = currentProduct.price;
@@ -307,7 +284,6 @@ function addToCart() {
     unitPrice: itemPrice,
     quantity: modalQuantity,
     addons: addons,
-    removals: removals,
     obs: obs,
   };
 
@@ -378,12 +354,8 @@ function updateCartUI() {
     el.className = 'cart-item';
 
     let details = '';
-    if (item.addons.length > 0) {
+    if (item.addons && item.addons.length > 0) {
       details += item.addons.map((a) => `+ ${a.name}`).join(', ');
-    }
-    if (item.removals.length > 0) {
-      if (details) details += ' | ';
-      details += item.removals.join(', ');
     }
     if (item.obs) {
       if (details) details += ' | ';
@@ -483,11 +455,8 @@ function submitOrder() {
   cart.forEach((item, i) => {
     msg += `*${i + 1}. ${item.name}*\n`;
     msg += `   Qtd: ${item.quantity} × ${formatPrice(item.unitPrice)}\n`;
-    if (item.addons.length > 0) {
+    if (item.addons && item.addons.length > 0) {
       msg += `   Adicionais: ${item.addons.map((a) => `${a.name} (+${formatPrice(a.price)})`).join(', ')}\n`;
-    }
-    if (item.removals.length > 0) {
-      msg += `   Remover: ${item.removals.join(', ')}\n`;
     }
     if (item.obs) {
       msg += `   Obs: ${item.obs}\n`;
