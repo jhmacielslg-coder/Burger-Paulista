@@ -16,9 +16,7 @@
     { "id": "artesanais", "name": "Artesanais", "icon": "🍔" },
     { "id": "combos", "name": "Combos", "icon": "🎉" },
     { "id": "batatas", "name": "Batatas", "icon": "🍟" },
-    { "id": "porcoes", "name": "Porções", "icon": "🧆" },
-    { "id": "bebidas", "name": "Bebidas", "icon": "🥤" },
-    { "id": "sobremesas", "name": "Sobremesas", "icon": "🍫" }
+    { "id": "bebidas", "name": "Bebidas", "icon": "🥤" }
   ],
   "products": [
     {
@@ -160,20 +158,6 @@
       "removals": []
     },
     {
-      "id": 8,
-      "name": "Onion Rings",
-      "category": "porcoes",
-      "description": "Anéis de cebola empanados e fritos, crocantes por fora e macios por dentro. Acompanha molho especial.",
-      "price": 24.90,
-      "image": "/images/onion-rings.jpg",
-      "badge": "",
-      "addons": [
-        { "name": "Molho extra", "price": 2.00 },
-        { "name": "Porção grande (+50%)", "price": 8.00 }
-      ],
-      "removals": []
-    },
-    {
       "id": 9,
       "name": "Refrigerante Lata 350ml",
       "category": "bebidas",
@@ -207,39 +191,6 @@
       "badge": "",
       "addons": [],
       "removals": []
-    },
-    {
-      "id": 12,
-      "name": "Brownie com Sorvete",
-      "category": "sobremesas",
-      "description": "Brownie artesanal de chocolate belga com bola de sorvete de baunilha e calda quente de chocolate.",
-      "price": 22.90,
-      "image": "/images/brownie.jpg",
-      "badge": "Imperdível",
-      "addons": [
-        { "name": "Bola extra de sorvete", "price": 4.00 },
-        { "name": "Calda de caramelo", "price": 3.00 }
-      ],
-      "removals": [
-        "Sem calda",
-        "Sem sorvete"
-      ]
-    },
-    {
-      "id": 13,
-      "name": "Milkshake Chocolate 400ml",
-      "category": "sobremesas",
-      "description": "Milkshake cremoso de chocolate com chantilly, calda de chocolate e granulado.",
-      "price": 19.90,
-      "image": "/images/milkshake.jpg",
-      "badge": "",
-      "addons": [
-        { "name": "Tamanho grande (600ml)", "price": 6.00 },
-        { "name": "Calda extra", "price": 3.00 }
-      ],
-      "removals": [
-        "Sem chantilly"
-      ]
     }
   ]
 }
