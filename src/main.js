@@ -12,6 +12,7 @@ let activeCategory = 'all';
 let currentProduct = null;
 let modalQuantity = 1;
 let selectedAddons = [];
+let currentDeliveryType = 'entrega'; // 'entrega' | 'retirada'
 
 // === DOM REFS ===
 const $ = (sel) => document.querySelector(sel);
@@ -428,12 +429,74 @@ function updateCartUI() {
   });
 
   // Update checkout totals
-  const deliveryFee = DATA.config.deliveryFee;
+  const isDelivery = currentDeliveryType === 'entrega';
+  const deliveryFee = isDelivery ? DATA.config.deliveryFee : 0;
   const total = subtotal + deliveryFee;
 
   $('#checkoutSubtotal').textContent = formatPrice(subtotal);
-  $('#checkoutDeliveryFee').textContent = formatPrice(deliveryFee);
+  $('#checkoutDeliveryFee').textContent = isDelivery ? formatPrice(deliveryFee) : 'Grátis (Balcão)';
   $('#checkoutTotal').textContent = formatPrice(total);
+  updateChangeCalculation();
+}
+
+// === DELIVERY TYPE ===
+function setDeliveryType(type) {
+  currentDeliveryType = type;
+  const isDelivery = type === 'entrega';
+
+  const btnEntrega = $('#btnTypeEntrega');
+  const btnRetirada = $('#btnTypeRetirada');
+  if (btnEntrega) btnEntrega.classList.toggle('active', isDelivery);
+  if (btnRetirada) btnRetirada.classList.toggle('active', !isDelivery);
+
+  const addressFields = $('#deliveryAddressFields');
+  if (addressFields) addressFields.style.display = isDelivery ? 'block' : 'none';
+
+  const pickupNotice = $('#pickupNotice');
+  if (pickupNotice) pickupNotice.style.display = isDelivery ? 'none' : 'flex';
+
+  const formTitle = $('#checkoutFormTitle');
+  if (formTitle) formTitle.textContent = isDelivery ? 'Dados para entrega' : 'Dados do Cliente';
+
+  const optDinheiro = $('#optDinheiro');
+  if (optDinheiro) {
+    optDinheiro.textContent = isDelivery ? 'Dinheiro na entrega' : 'Dinheiro na retirada';
+  }
+
+  updateCartUI();
+}
+
+// === CHANGE CALCULATION (TROCO) ===
+function updateChangeCalculation() {
+  const changeBox = $('#changeBox');
+  if (!changeBox || changeBox.style.display === 'none') return;
+
+  const changeInput = $('#checkoutChangeInput');
+  const feedback = $('#changeFeedback');
+  if (!changeInput || !feedback) return;
+
+  const subtotal = getCartTotal();
+  const isDelivery = currentDeliveryType === 'entrega';
+  const deliveryFee = isDelivery ? DATA.config.deliveryFee : 0;
+  const total = subtotal + deliveryFee;
+
+  const raw = changeInput.value.replace(/[^\d.,]/g, '').replace(',', '.').trim();
+  const val = parseFloat(raw);
+
+  if (!raw || isNaN(val)) {
+    feedback.innerHTML = `<span class="feedback--info">Se não precisar de troco, deixe em branco.</span>`;
+    return;
+  }
+
+  const troco = val - total;
+  if (troco > 0.001) {
+    const actor = isDelivery ? 'O entregador levará' : 'Seu troco no balcão será de';
+    feedback.innerHTML = `<span class="feedback--success">✅ ${actor} <strong>${formatPrice(troco)}</strong> de troco.</span>`;
+  } else if (Math.abs(troco) <= 0.001) {
+    feedback.innerHTML = `<span class="feedback--success">✅ Valor exato! Não precisa de troco.</span>`;
+  } else {
+    feedback.innerHTML = `<span class="feedback--warning">⚠️ Valor menor que o total do pedido (${formatPrice(total)}).</span>`;
+  }
 }
 
 // === CART SIDEBAR ===
@@ -468,7 +531,7 @@ function showToast(message) {
 function submitOrder() {
   if (cart.length === 0) return;
 
-  // Validate
+  const isDelivery = currentDeliveryType === 'entrega';
   const name = $('#checkoutName').value.trim();
   const address = $('#checkoutAddress').value.trim();
   const setor = $('#checkoutSetor').value.trim();
@@ -481,13 +544,40 @@ function submitOrder() {
   $$('.checkout__field input, .checkout__field select').forEach((el) => el.classList.remove('error'));
 
   if (!name) { $('#checkoutName').classList.add('error'); hasError = true; }
-  if (!address) { $('#checkoutAddress').classList.add('error'); hasError = true; }
-  if (!setor) { $('#checkoutSetor').classList.add('error'); hasError = true; }
+  if (isDelivery) {
+    if (!address) { $('#checkoutAddress').classList.add('error'); hasError = true; }
+    if (!setor) { $('#checkoutSetor').classList.add('error'); hasError = true; }
+  }
   if (!payment) { $('#checkoutPayment').classList.add('error'); hasError = true; }
 
   if (hasError) {
     showToast('Preencha todos os campos obrigatórios');
     return;
+  }
+
+  const subtotal = getCartTotal();
+  const deliveryFee = isDelivery ? DATA.config.deliveryFee : 0;
+  const total = subtotal + deliveryFee;
+
+  let changeInfo = '';
+  if (payment === 'dinheiro') {
+    const rawChange = $('#checkoutChangeInput').value.replace(/[^\d.,]/g, '').replace(',', '.').trim();
+    const changeVal = parseFloat(rawChange);
+    if (rawChange && !isNaN(changeVal)) {
+      if (changeVal < total) {
+        $('#checkoutChangeInput').focus();
+        showToast(`O valor para troco deve ser maior ou igual a ${formatPrice(total)}`);
+        return;
+      }
+      const troco = changeVal - total;
+      if (troco > 0.001) {
+        changeInfo = `\n💰 *Pagar com:* ${formatPrice(changeVal)}\n🪙 *Troco:* ${formatPrice(troco)}`;
+      } else {
+        changeInfo = `\n🪙 *Troco:* Não precisa de troco (valor exato)`;
+      }
+    } else {
+      changeInfo = `\n🪙 *Troco:* Não precisa de troco (valor exato)`;
+    }
   }
 
   // Build message
@@ -506,33 +596,46 @@ function submitOrder() {
     msg += `   Subtotal: *${formatPrice(item.unitPrice * item.quantity)}*\n\n`;
   });
 
-  const subtotal = getCartTotal();
-  const deliveryFee = DATA.config.deliveryFee;
-  const total = subtotal + deliveryFee;
-
   msg += `━━━━━━━━━━━━━━━━━━\n`;
   msg += `📦 Subtotal: ${formatPrice(subtotal)}\n`;
-  msg += `🚚 Taxa de entrega: ${formatPrice(deliveryFee)}\n`;
+  if (isDelivery) {
+    msg += `🚚 Taxa de entrega: ${formatPrice(deliveryFee)}\n`;
+  } else {
+    msg += `🏪 Retirada no balcão: Grátis\n`;
+  }
   msg += `💰 *TOTAL: ${formatPrice(total)}*\n`;
   msg += `━━━━━━━━━━━━━━━━━━\n\n`;
 
-  msg += `📍 *Dados de Entrega:*\n`;
-  msg += `Nome: ${name}\n`;
-  msg += `Endereço: ${address}\n`;
-  msg += `Setor: ${setor}\n`;
-  if (reference) {
-    msg += `Ponto de Referência: ${reference}\n`;
+  if (isDelivery) {
+    msg += `🛵 *Tipo:* Entrega\n`;
+    msg += `📍 *Dados de Entrega:*\n`;
+    msg += `Nome: ${name}\n`;
+    msg += `Endereço: ${address}\n`;
+    msg += `Setor: ${setor}\n`;
+    if (reference) {
+      msg += `Ponto de Referência: ${reference}\n`;
+    }
+  } else {
+    msg += `🏪 *Tipo:* Retirada no Balcão\n`;
+    msg += `📍 *Local:* Laguinho do Vovô - Formosa/GO\n`;
+    msg += `👤 *Cliente:* ${name}\n`;
   }
   msg += `\n`;
 
-  const paymentLabel = payment === 'pix' ? 'Pix' : 'Pagar na Entrega (Cartão/Dinheiro)';
-  msg += `💳 *Pagamento:* ${paymentLabel}\n`;
+  let paymentLabel = '';
+  if (payment === 'pix') paymentLabel = 'PIX';
+  else if (payment === 'credito') paymentLabel = 'Cartão de Crédito';
+  else if (payment === 'debito') paymentLabel = 'Cartão de Débito';
+  else if (payment === 'dinheiro') paymentLabel = isDelivery ? 'Dinheiro na entrega' : 'Dinheiro na retirada';
+  else paymentLabel = payment;
+
+  msg += `💳 *Forma de Pagamento:* ${paymentLabel}${changeInfo}\n`;
 
   if (payment === 'pix') {
     msg += `🔑 Chave Pix: ${DATA.config.pixKey}\n`;
   }
 
-  msg += `\n⏰ Tempo estimado: ${DATA.config.deliveryTime}\n`;
+  msg += `\n⏰ Tempo estimado: ${isDelivery ? DATA.config.deliveryTime : '20–30 minutos'}\n`;
   msg += `\n_Pedido enviado pelo cardápio digital Burger Paulista_`;
 
   const encoded = encodeURIComponent(msg);
@@ -608,11 +711,34 @@ function setupEventListeners() {
   const floatingBar = $('#floatingCartBar');
   if (floatingBar) floatingBar.addEventListener('click', openCart);
 
-  // Payment select - show/hide pix
+  // Delivery toggle
+  const btnEntrega = $('#btnTypeEntrega');
+  const btnRetirada = $('#btnTypeRetirada');
+  if (btnEntrega) btnEntrega.addEventListener('click', () => setDeliveryType('entrega'));
+  if (btnRetirada) btnRetirada.addEventListener('click', () => setDeliveryType('retirada'));
+
+  // Payment select - show/hide pix and change box
   $('#checkoutPayment').addEventListener('change', (e) => {
     const pixBox = $('#pixBox');
-    pixBox.style.display = e.target.value === 'pix' ? 'block' : 'none';
+    const changeBox = $('#changeBox');
+    const method = e.target.value;
+
+    if (pixBox) pixBox.style.display = method === 'pix' ? 'block' : 'none';
+    if (changeBox) {
+      changeBox.style.display = method === 'dinheiro' ? 'block' : 'none';
+      if (method === 'dinheiro') {
+        updateChangeCalculation();
+        const input = $('#checkoutChangeInput');
+        if (input) input.focus();
+      }
+    }
   });
+
+  // Change input listener
+  const changeInput = $('#checkoutChangeInput');
+  if (changeInput) {
+    changeInput.addEventListener('input', updateChangeCalculation);
+  }
 
   // Pix copy
   $('#pixCopyBtn').addEventListener('click', () => {
